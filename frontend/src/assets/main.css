@@ -1,0 +1,48 @@
+@import './base.css';
+
+#app {
+  width: 100%;
+  margin: 0 auto;
+  font-weight: normal;
+}
+p, label, h3, input, option, select {
+  color: var(--vt-c-text-light-1)
+}
+select {
+  border-radius: none;
+}
+input, select {
+  width: 100%;
+  padding: 5px 10px;
+  height: 34px;
+  border: 1px solid var(--vt-c-text-light-1);
+  border-radius: 8px;
+}
+h2 {
+  color: var(--vt-c-green);
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+.cta {
+  border-color: var(--vt-c-divider-light-2);
+  color: var(--vt-c-green);
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+  }
+}
