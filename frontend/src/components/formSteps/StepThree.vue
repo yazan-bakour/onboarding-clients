@@ -1,20 +1,9 @@
 <script setup lang="ts">
   import { useAccordionItemStore } from "@/stores/useAccordionItemStore";
   import { useActiveIndexStore } from "@/stores/useActiveIndexStore";
-  import { useStepNumberStore } from "@/stores/useStepNumberStore";
   import { ref, watchEffect } from 'vue';
 
-  interface AccordionItemState {
-    phone: string;
-    email: string;
-    postcode: string;
-    houseNumber: string;
-    addition: string;
-    streetName: string;
-    placeName: string;
-  }
   const accordionItemStore = useAccordionItemStore();
-  const stepNumberStore = useStepNumberStore();
   const activeIndexStore = useActiveIndexStore()
 
   const phone = ref('')
@@ -24,6 +13,7 @@
   const addition = ref('')
   const streetName = ref('')
   const placeName = ref('')
+  const stepNumber = ref(2)
 
   watchEffect(() => {
     accordionItemStore.accordionItems.forEach((item, index) => {
@@ -35,6 +25,7 @@
         addition.value = item.formData.addition
         streetName.value = item.formData.streetName
         placeName.value = item.formData.placeName
+        stepNumber.value = item.formData.stepNumber
       }
     })
   });
@@ -44,14 +35,16 @@
   }
   
   const prevStep = () => {
-    stepNumberStore.setStepNumber(1)
+    accordionItemStore.updateState(1, 'stepNumber');
   }
 
   const handleThirdStepYes = () => {
     return accordionItemStore.createNewAccordionItem()
 
   };
-  const handleThirdStepNo = () => {}
+  const handleThirdStepNo = () => {
+    activeIndexStore.setActiveIndex(null)
+  }
 
 </script>
 

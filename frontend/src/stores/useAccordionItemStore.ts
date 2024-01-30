@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import {useActiveIndexStore} from './useActiveIndexStore'
 
 interface AccordionItemState {
+  stepNumber: number;
   existingCustomer: string;
   language: string;
   location: string;
@@ -39,6 +40,7 @@ export const useAccordionItemStore = defineStore('accordionItem', () => {
         id: 0,
         title: 'Customer 1',
         formData: {
+          stepNumber: 0,
           existingCustomer: '',
           language: '',
           location: '',
@@ -60,12 +62,14 @@ export const useAccordionItemStore = defineStore('accordionItem', () => {
     ]
   );
 
-  const updateState = (event: string, sateName: string) => {
+  const updateState = (event: any, sateName: string) => {
     accordionItems.value.forEach((item, index) => {
       if (index !== activeIndexStore.activeIndex) {
         return null
       }
       switch (sateName) {
+        case 'stepNumber':
+          return item.formData.stepNumber = event
         case 'existingCustomer':
           return item.formData.existingCustomer = event
         case 'language':
@@ -105,16 +109,13 @@ export const useAccordionItemStore = defineStore('accordionItem', () => {
     })
   }
 
-  const updateFormData = (index: number, formData: AccordionItemState) => {
-    accordionItems.value[index].formData = formData;
-  };
-
   const createNewAccordionItem = () => {
     const index = accordionItems.value.length;
     const newAccordionItem: AccordionItem = {
       id: index,
       title: `Customer ${index + 1}`,
       formData: {
+        stepNumber: 0,
         existingCustomer: '',
         language: '',
         location: '',
@@ -141,9 +142,7 @@ export const useAccordionItemStore = defineStore('accordionItem', () => {
   watch([accordionItems, activeIndexStore.activeIndex], () => {
     const state = {
       activeIndex: activeIndexStore.activeIndex,
-      accordions: accordionItems.value.map((item, index) => {
-        return item
-      })
+      accordions: accordionItems.value.map(item => item)
     };
     localStorage.setItem('accordionState', JSON.stringify(state));
   }, { deep: true });
@@ -154,6 +153,6 @@ export const useAccordionItemStore = defineStore('accordionItem', () => {
     // setAccordionItems,
     accordionItems: computed(() => accordionItems.value),
     createNewAccordionItem,
-    updateFormData
+    // updateFormData
   };
 });

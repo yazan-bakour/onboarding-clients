@@ -1,25 +1,17 @@
 <script setup lang="ts">
   import { useAccordionItemStore } from "@/stores/useAccordionItemStore"
-  import { useStepNumberStore } from "@/stores/useStepNumberStore";
-  import { ref, watch, computed, onMounted, toRefs, watchEffect } from "vue";
+  import { ref, toRefs, watchEffect } from "vue";
   import { storeToRefs } from "pinia"
   import { useActiveIndexStore } from "@/stores/useActiveIndexStore";
   
-  interface AccordionItemState {
-    existingCustomer: string;
-    language: string;
-    location: string;
-    director: string;
-  }
-  
-  const accordionItemStore = useAccordionItemStore();
-  const stepNumberStore = useStepNumberStore()
+  const accordionItemStore = useAccordionItemStore()
   const activeIndexStore = useActiveIndexStore()
   
   const existingCustomer = ref('')
   const language = ref('')
   const location = ref('')
   const director = ref('')
+  const stepNumber = ref(0)
 
   watchEffect(() => {
     accordionItemStore.accordionItems.forEach((item, index) => {
@@ -28,6 +20,7 @@
         language.value = item.formData.language
         location.value = item.formData.location
         director.value = item.formData.director
+        stepNumber.value = item.formData.stepNumber
       }
     })
   });
@@ -37,7 +30,7 @@
   }
 
   const handleFirstStep = () => {
-    stepNumberStore.setStepNumber(1);
+    accordionItemStore.updateState(1, 'stepNumber');
   };
 
 </script>

@@ -2,18 +2,9 @@
   import { ref, watchEffect, computed } from 'vue';
   import { countries } from "../helper"
   import { useAccordionItemStore } from "@/stores/useAccordionItemStore";
-  import { useStepNumberStore } from "@/stores/useStepNumberStore";
   import { useActiveIndexStore } from '@/stores/useActiveIndexStore';
 
-  interface AccordionItemState {
-    title: string;
-    firstName: string;
-    lastName: string;
-    birthday: string;
-    country: string;
-  }
   const accordionItemStore = useAccordionItemStore();
-  const stepNumberStore = useStepNumberStore();
   const activeIndexStore = useActiveIndexStore()
 
   const title = ref('')
@@ -21,6 +12,8 @@
   const lastName = ref('')
   const birthday = ref('')
   const country = ref('')
+  const stepNumber = ref(1)
+  const back = ref(false)
 
   watchEffect(() => {
     accordionItemStore.accordionItems.forEach((item, index) => {
@@ -30,6 +23,7 @@
         lastName.value = item.formData.lastName
         birthday.value = item.formData.birthday
         country.value = item.formData.country
+        stepNumber.value = item.formData.stepNumber
       }
     })
   });
@@ -39,10 +33,10 @@
   }
 
   const prevStep = () => {
-    stepNumberStore.setStepNumber(0)
+    accordionItemStore.updateState(0, 'stepNumber');
   }
   const handleSecondStep = () => {
-    stepNumberStore.setStepNumber(2);
+    accordionItemStore.updateState(2, 'stepNumber');
   };
 
 </script>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, watch } from 'vue';
+  import { ref } from 'vue';
   import AccordionComponent from './AccordionComponent.vue';
   import StepperComponentVue from '../common/StepperComponent.vue';
   import WizardFormComponent from './WizardFormComponent.vue';
@@ -22,9 +22,6 @@
   ])
   
   const accordionItems = accordionItemStore.accordionItems
-
-  const storage = localStorage.getItem('accordionState')
-  const storedAccordionItems = storage ? JSON.parse(storage) : null
   
 </script>
 
@@ -32,7 +29,7 @@
   <AccordionComponent :items="accordionItems">
     <div class="flex">
       <StepperComponentVue :stepperItems="stepperItems" :item="accordionItems[activeIndexStore.activeIndex]"> 
-        <WizardFormComponent />
+        <WizardFormComponent :item="accordionItems[activeIndexStore.activeIndex]" />
       </StepperComponentVue>
     </div>
   </AccordionComponent>
