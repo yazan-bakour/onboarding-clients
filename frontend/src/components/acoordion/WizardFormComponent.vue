@@ -5,7 +5,7 @@
   import { useStepNumberStore } from "@/stores/useStepNumberStore";
 
   const stepNumberStore = useStepNumberStore()
-  console.log("Current Step Number:", stepNumberStore.stepNumber);
+
 </script>
 
 <template>

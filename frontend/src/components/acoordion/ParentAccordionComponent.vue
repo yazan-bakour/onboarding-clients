@@ -1,40 +1,14 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
   import AccordionComponent from './AccordionComponent.vue';
   import StepperComponentVue from '../common/StepperComponent.vue';
   import WizardFormComponent from './WizardFormComponent.vue';
   import { useActiveIndexStore } from '@/stores/useActiveIndexStore';
+  import { useAccordionItemStore } from "@/stores/useAccordionItemStore";
 
   const activeIndexStore = useActiveIndexStore();
+  const accordionItemStore = useAccordionItemStore();
 
-  interface AccordionItem {
-    title: string;
-    formData: any;
-  }
-
-  const accordionItems = ref<AccordionItem[]>([
-    {
-      title: 'Customer 1',
-      formData: {
-        existingCustomer: '',
-        language: '',
-        location: '',
-        director: '',
-        title: '',
-        firstName: '',
-        lastName: '',
-        birthday: '',
-        country: '',
-        phone: '',
-        email: '',
-        postcode: '',
-        houseNumber: '',
-        addition: '',
-        streetName: '',
-        placeName: ''
-      } 
-    }
-  ]);
   const stepperItems = ref([
     {
       step: 'General data',
@@ -46,7 +20,12 @@
       step: 'Contact details',
     }
   ])
+  
+  const accordionItems = accordionItemStore.accordionItems
 
+  const storage = localStorage.getItem('accordionState')
+  const storedAccordionItems = storage ? JSON.parse(storage) : null
+  
 </script>
 
 <template>

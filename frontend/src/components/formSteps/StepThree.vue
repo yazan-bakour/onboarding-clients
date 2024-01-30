@@ -1,12 +1,22 @@
 <script setup lang="ts">
   import { useAccordionItemStore } from "@/stores/useAccordionItemStore";
+  import { useActiveIndexStore } from "@/stores/useActiveIndexStore";
   import { useStepNumberStore } from "@/stores/useStepNumberStore";
   import { ref, watchEffect } from 'vue';
 
+  interface AccordionItemState {
+    phone: string;
+    email: string;
+    postcode: string;
+    houseNumber: string;
+    addition: string;
+    streetName: string;
+    placeName: string;
+  }
   const accordionItemStore = useAccordionItemStore();
   const stepNumberStore = useStepNumberStore();
+  const activeIndexStore = useActiveIndexStore()
 
-  const id = ref(0); 
   const phone = ref('')
   const email = ref('')
   const postcode = ref('')
@@ -16,84 +26,30 @@
   const placeName = ref('')
 
   watchEffect(() => {
-    const store = accordionItemStore.state
-    const formData = accordionItemStore.state.formData
-    if (store.id === id.value) {
-      phone.value = formData.phone
-      email.value = formData.email
-      postcode.value = formData.postcode
-      houseNumber.value = formData.houseNumber
-      addition.value = formData.addition
-      streetName.value = formData.streetName
-      placeName.value = formData.placeName
-    }
-  })
+    accordionItemStore.accordionItems.forEach((item, index) => {
+      if (index === activeIndexStore.activeIndex) {
+        phone.value = item.formData.phone
+        email.value = item.formData.email
+        postcode.value = item.formData.postcode
+        houseNumber.value = item.formData.houseNumber
+        addition.value = item.formData.addition
+        streetName.value = item.formData.streetName
+        placeName.value = item.formData.placeName
+      }
+    })
+  });
 
-  const initializeNewAccordion = (newId: number) => {
-    return {
-      id: newId,
-      existingCustomer: '',
-      language: '',
-      location: '',
-      director: '',
-      title: '',
-      firstName: '',
-      lastName: '',
-      birthday: '',
-      country: '',
-      phone: '',
-      email: '',
-      postcode: '',
-      houseNumber: '',
-      addition: '',
-      streetName: '',
-      placeName: '',
-    };
-  };
+  const updateSate = (value: string, stateName: string) => {
+    accordionItemStore.updateState(value, stateName);
+  }
   
   const prevStep = () => {
     stepNumberStore.setStepNumber(1)
   }
-  let accordionData = ref(initializeNewAccordion(id.value));
-
-  const createNewAccordion = () => {
-    id.value += 1;
-    const newAccordionData = initializeNewAccordion(id.value);
-    accordionItemStore.setAccordionItem(id.value, {
-      title: newAccordionData.title,
-      formData: newAccordionData,
-    });
-    accordionData.value = newAccordionData;
-    accordionData = ref(newAccordionData);
-
-  }
 
   const handleThirdStepYes = () => {
-    const formData = accordionItemStore.state.formData  
-    accordionItemStore.setAccordionItem(id.value, {
-      title: formData.firstName,
-      formData: {
-        existingCustomer: formData.existingCustomer,
-        language: formData.language,
-        location: formData.location,
-        director: formData.director,
-        title: formData.title,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        birthday: formData.birthday,
-        country: formData.country,
-        phone: phone.value,
-        email: email.value,
-        postcode: postcode.value,
-        houseNumber: houseNumber.value,
-        addition: addition.value,
-        streetName: streetName.value,
-        placeName: placeName.value
-      }
-    });
-    //Add logic to store the current customer based on id and open new accordion
-    console.log('Done');
-    createNewAccordion()
+    return accordionItemStore.createNewAccordionItem()
+
   };
   const handleThirdStepNo = () => {}
 
@@ -110,12 +66,12 @@
       <div class="flex flex-row w-full mb-6">
         <div class="w-1/3 mr-5">
           <h3>phone number</h3>
-          <input type="text" v-model="phone" />
+          <input type="text" v-model="phone" @input="updateSate(phone, 'phone')" />
         </div>
         <br>
         <div class="w-2/3">
           <h3>E-mail</h3>
-          <input type="text" v-model="email" />
+          <input type="text" v-model="email" @input="updateSate(email, 'email')" />
         </div>
       </div>
 
@@ -127,26 +83,26 @@
       <div class="w-full flex">
         <div class="mr-5 flex-auto w-7/12">
           <h3>Postal Code</h3>
-          <input type="text" v-model="postcode" />
+          <input type="text" v-model="postcode" @input="updateSate(postcode, 'postcode')" />
         </div>
         <div class="mr-5 flex-auto w-1/3">
           <h3>House number</h3>
-          <input type="text" v-model="houseNumber" />
+          <input type="text" v-model="houseNumber" @input="updateSate(houseNumber, 'houseNumber')" />
         </div>
         <div class="flex-auto w-1/3">
           <h3>Addition</h3>
-          <input type="text" v-model="addition" />
+          <input type="text" v-model="addition" @input="updateSate(addition, 'addition')" />
         </div>
       </div>
       <br>
       <div class="flex flex-row">
         <div class="w-full mr-5">
           <h3>Street name</h3>
-          <input type="text" v-model="streetName" />
+          <input type="text" v-model="streetName" @input="updateSate(streetName, 'streetName')" />
         </div>
         <div class="w-full">
           <h3>Place name</h3>
-          <input type="text" v-model="placeName" />
+          <input type="text" v-model="placeName" @input="updateSate(placeName, 'placeName')" />
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@
   const activeIndexStore = useActiveIndexStore();
 
   interface AccordionItem {
-    //Change any to object
+    id: number,
     title: string;
     formData: any;
   }
@@ -44,7 +44,7 @@
       <div class="flex justify-between">
         <h2 class="font-bold text-lg">{{ item.title }}</h2>
         <div class="flex flex-row items-center">
-          <button v-if="index !== 0" class="mr-4 rounded-full border-2 border-solid border-[#f96555] w-6 h-6 flex items-center justify-center" @click="toggleModal(item.formData.id)">
+          <button v-if="index !== 0" class="mr-4 rounded-full border-2 border-solid border-[#f96555] w-6 h-6 flex items-center justify-center" @click="toggleModal(item.id)">
             <!-- <img class="w-2" alt="Delete" src="@/assets/x-solid.svg" /> -->
           </button>
           <button class="rounded-full border-2 border-solid border-[#72b9f6] w-6 h-6 flex items-center justify-center" @click="toggleSection(index)">
